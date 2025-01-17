@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+
+const { href, class: className, ...props } = Astro.props;
+
+const { pathname } = Astro.url;
+const isActive = href === pathname || href === pathname.replace(/\/$/, '');
+---
+<header-link>
+  <a
+    href={href}
+    class:list={[
+      className,
+      { 'active font-bold underline': isActive },
+      'inline-block',
+      'hover:scale-125',
+      'transition-transform',
+      'text-black',
+      'font-medium',
+      'no-underline',
+    ]}
+    {...props}
+  >
+    <slot />
+  </a>
+</header-link>
+<script>
+  import { $color } from "../store";
+
+  class HeaderLink extends HTMLElement {
+    constructor() {
+      super();
+    }
+    connectedCallback() {
+      const a = this.querySelector('a') as HTMLAnchorElement;
+      $color.subscribe(c => a.style.textShadow = `#${c} 0 0 2px, #${c} 0 0 4px, #000 0 0 6px`);
+    }
+  }
+  customElements.define('header-link', HeaderLink)
+</script>

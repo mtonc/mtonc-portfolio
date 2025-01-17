@@ -1,0 +1,43 @@
+<astro-window>
+  <div>
+    <slot />
+  </div>
+</astro-window>
+<script>
+import { $color } from "../store";
+
+	class AstroWindow extends HTMLElement {
+    constructor() {
+      super();
+    }
+    connectedCallback() {
+      const options = {
+        root: this.querySelector("astro-window") as HTMLElement,
+        threshold: 0.5,
+      };
+      const observer = new IntersectionObserver((entries) => {
+        const intersect = entries.filter((entry) => entry.isIntersecting);
+        if (intersect) {
+          const elem = intersect[0].target as HTMLElement;
+          const bgColor = elem.dataset.color;
+          if (bgColor) {
+            $color.set(bgColor);
+          }
+        }
+      }, options);
+      this.querySelectorAll("div.pane").forEach((element) => {
+        observer.observe(element);
+      });
+    }
+  }
+
+  customElements.define('astro-window', AstroWindow);
+</script>
+<style>
+	div {
+		height: calc(100vh - 178px);
+		width: 100%;
+		scroll-snap-type: y mandatory;
+		overflow-y: scroll;
+	}
+</style>

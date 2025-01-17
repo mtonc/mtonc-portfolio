@@ -1,0 +1,35 @@
+---
+import BasePage from "../layouts/BasePage.astro";
+import Pane from "../components/Pane.astro";
+import AstroWindow from "../components/AstroWindow.astro";
+import { Image } from 'astro:assets';
+---
+<BasePage
+  description="The home page of the site"
+>
+  <AstroWindow>
+    <Pane color="aadfe5">
+      <h2 class="text-2xl"> Hello, world! 🌎</h2>
+      <br/>
+      <p>
+        Welcome to mtonc.dev. This is my personal portfolio site to demonstrate various technologies as well as host my blog. 
+        I will be discussing my various projects, including code examples. The long term goals of this site is to cultivate 
+        an audience, earn money through ads and affilate links, and to demostrate my writing abilities in the hopes
+        of securing a Developer Relations job.
+      </p>
+    </Pane>
+    <Pane color="f7c821">
+      <h2 class="text-2xl">Socials</h2>
+      <ul class="socials">
+        <li class="flex items-center"><Image height={32} width={32} class="inline w-4 h-4" src="https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca" alt="LinkedIn logo"/>Linkedin: <a href="https://www.linkedin/in/marktonchick">Mark Tonchick</a></li>
+        <li class="flex items-center"><Image height={32} width={32} class="inline w-4 h-4" src="/github.png" alt="GitHub logo"/>Github:&nbsp;<a href="https://github.com/mtonc">mtonc on github</a></li>
+        <li>Discord: <a href="https://discordapp.com/users/398293326442397697">mtonc on discord</a></li>
+        <li>Codepen:&nbsp;<a href="https://codepen.io/mtonc">mtonc on codepen</a></li>
+        <li>p5.js:&nbsp;<a href="https://editor.p5js.org/m.tonchick/sketches">mtonc on p5.js</a></li>
+      </ul>
+    </Pane>
+    <Pane color="e279e1">
+      
+    </Pane>
+  </AstroWindow>
+</BasePage>

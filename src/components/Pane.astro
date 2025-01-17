@@ -1,0 +1,25 @@
+---
+interface Props {
+	color: string;
+}
+
+const { color } = Astro.props;
+---
+
+<div class="pane p-4 relative w-full" data-color={color}>
+  <div class="pane-content bg-white/50 p-2 relative rounded-lg overflow-y-auto">
+    <slot />
+  </div>
+</div>
+<style>
+	.pane {
+		height: calc(100vh - 178px);
+		scroll-snap-align: start;
+    overflow: hidden;
+	}
+  .pane-content {
+    position: relative;
+    height: calc(100% - 16px);
+    overflow: scroll;
+  }
+</style>
