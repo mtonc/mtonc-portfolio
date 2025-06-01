@@ -1,0 +1,39 @@
+---
+import { type CollectionEntry } from 'astro:content'
+import { CldImage } from 'astro-cloudinary'; 
+import FormattedDate from './FormattedDate.astro';
+
+interface Props { 
+  post: CollectionEntry<'blog'>
+}
+
+const { post } = Astro.props
+const { title, description, heroImage = undefined, pubDate } = post.data
+const index = Math.floor(Math.random()*4);
+const postLink = `/blog/${post.slug}`
+---
+
+<post-card>
+  <a class="rounded-b-md post-card " href={postLink}>
+    <CldImage
+      class="transition duration-300 grayscale hover:grayscale-0"
+      src={heroImage || 'ai_circuits'} 
+      width={300} 
+      height={150} 
+      alt="A fine photograph"
+    />
+    <div
+      class='p-4'
+      class:list={{
+        'bg-sky-500/75': index === 0 ,
+        'bg-fuchsia-500/75': index === 1,
+        'bg-yellow-600/75': index === 2,
+        'bg-orange-600/75': index === 3
+      }}
+    >
+      <h3>{title}</h3></a>
+      <span><span class="hidden md:inline">Publised on: </span><FormattedDate date={pubDate}/></span>
+      <p>{description}</p>
+    </div>
+  </a>
+</post-card>

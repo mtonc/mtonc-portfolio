@@ -1,0 +1,60 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import { SITE_TITLE } from '../consts';
+
+interface Link {
+  href: string;
+  text: string;
+}
+
+const links: Link[] = [
+  {
+    href: '/',
+    text: 'Home',
+  },
+  {
+    href: '/about',
+    text: 'About'
+  },
+  {
+    href: '/blog',
+    text: 'Blog'
+  }
+]
+---
+<custom-header class="max-w-full relative">
+  <div class="bg-cover bg-[url('/grid.svg')]">
+  <header class="
+    p-4
+    border-b
+    border-double
+    border-slate-900
+    bg-gradient-to-tr from-black to-transparent
+    font-['dm']
+    max-w-full
+  ">
+    <h2 class="text-4xl text-black my-3">
+      {SITE_TITLE}
+    </h2>
+    
+    <nav>
+      { links.map((link) => <HeaderLink class="mr-4"href={link.href}>{link.text}</HeaderLink> )}
+    </nav>
+  </header>
+  </div>
+</custom-header>
+<script>
+  import { $color } from '../store';
+
+  class CustomHeader extends HTMLElement {
+    constructor() {
+      super();
+    }
+    connectedCallback() {
+      const siteTitle = this.querySelector('h2') as HTMLHeadingElement;
+      $color.subscribe(c => siteTitle.style.color = `#${c}`);
+    }
+  }
+
+  customElements.define('custom-header', CustomHeader);
+</script>

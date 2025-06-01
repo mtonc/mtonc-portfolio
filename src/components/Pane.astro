@@ -1,25 +1,16 @@
 ---
 interface Props {
 	color: string;
+  heading?: string | undefined;
 }
 
-const { color } = Astro.props;
+const { color , heading = undefined } = Astro.props;
 ---
-
-<div class="pane p-4 relative w-full" data-color={color}>
-  <div class="pane-content bg-white/50 p-2 relative rounded-lg overflow-y-auto">
+<div class="pane p-4 w-full h-[calc(100vh-178px)] snap-start overflow-hidden" data-color={color}>
+  <div class="shadow-lg relative bg-white/50 p-4 rounded-lg overflow-y-auto h-full">
+    {heading && <slot name="heading">
+      <h3>{heading}</h3>
+    </slot>}
     <slot />
   </div>
 </div>
-<style>
-	.pane {
-		height: calc(100vh - 178px);
-		scroll-snap-align: start;
-    overflow: hidden;
-	}
-  .pane-content {
-    position: relative;
-    height: calc(100% - 16px);
-    overflow: scroll;
-  }
-</style>

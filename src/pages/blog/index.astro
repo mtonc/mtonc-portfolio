@@ -1,38 +1,33 @@
 ---
 import BasePage from '../../layouts/BasePage.astro';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import type { CollectionEntry } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
 
-const posts = (await getCollection('blog')).sort(
+const posts = await getCollection('blog') as CollectionEntry<'blog'>[];
+const sorted = posts.sort(
 	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
 );
 ---
-<BasePage>
-  <ul>
-    {
-      posts.map((post) => (
-        <li>
-          <FormattedDate date={post.data.pubDate} />
-          <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
-        </li>
-      ))
-    }
-  </ul>
-</BasePage>
-<style>
-  ul {
-    list-style-type: none;
-    padding: unset;
-  }
-  ul li {
-    display: flex;
-  }
-  ul li :global(time) {
-    flex: 0 0 130px;
-    font-style: italic;
-    color: #595959;
-  }
-  ul li a:visited {
-    color: #8e32dc;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title="Blog Home" description="The blog homepage that lists the posts" image="ai_circuits"/>
+  </head>
+  <BasePage
+    title="Blog Home"
+    description="The homepage of the blog; list of posts"
+    showTitle
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {
+        sorted.map((post) => (
+          <PostCard
+            post={post}
+          ></PostCard>
+        ))
+      }
+    </div>
+  </BasePage>
+</html>

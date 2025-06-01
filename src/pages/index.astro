@@ -1,35 +1,83 @@
 ---
 import BasePage from "../layouts/BasePage.astro";
+import BaseHead from "../components/BaseHead.astro";
 import Pane from "../components/Pane.astro";
 import AstroWindow from "../components/AstroWindow.astro";
-import { Image } from 'astro:assets';
+import SocialLink from '../components/SocialLink.astro';
+
+interface socialLink {
+  src: string;
+  altText?: string | undefined;
+  href: string;
+  linkText: string;
+  label?: string;
+}
+
+const socials: socialLink[] = [
+  {
+    altText: 'LinkedIn logo',
+    href: 'https://www.linkedin/in/marktonchick',
+    linkText: 'Mark Tonchick',
+    src: 'LI-In-Bug_m5eans',
+    label: 'LinkedIn',
+  },
+  {
+    altText: 'GitHub logo',
+    href: 'https://github.com/mtonc"',
+    linkText: 'mtonc',
+    src: 'github_jd2z5w',
+    label: 'Github'
+  },
+  {
+    altText: 'Discord logo',
+    href: 'https://discordapp.com/users/398293326442397697',
+    linkText: 'mtonc',
+    src: 'icon_clyde_blurple_CMYK_hrrlvt',
+    label: 'Discord'
+  },
+  {
+    altText: 'CodePen Logo',
+    href: 'https://codepen.io/mtonc',
+    linkText: 'mtonc',
+    src: 'cp-logo_k5jjkn',
+    label: 'CodePen'
+  },
+  {
+    altText: 'p5.js logo',
+    href: 'https://editor.p5js.org/m.tonchick/sketches',
+    linkText: 'm.tonchick',
+    src: 'p5_hrpoox',
+    label: 'p5.js'
+  }
+];
+
+
 ---
-<BasePage
-  description="The home page of the site"
->
-  <AstroWindow>
-    <Pane color="aadfe5">
-      <h2 class="text-2xl"> Hello, world! 🌎</h2>
-      <br/>
-      <p>
-        Welcome to mtonc.dev. This is my personal portfolio site to demonstrate various technologies as well as host my blog. 
-        I will be discussing my various projects, including code examples. The long term goals of this site is to cultivate 
-        an audience, earn money through ads and affilate links, and to demostrate my writing abilities in the hopes
-        of securing a Developer Relations job.
-      </p>
-    </Pane>
-    <Pane color="f7c821">
-      <h2 class="text-2xl">Socials</h2>
-      <ul class="socials">
-        <li class="flex items-center"><Image height={32} width={32} class="inline w-4 h-4" src="https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca" alt="LinkedIn logo"/>Linkedin: <a href="https://www.linkedin/in/marktonchick">Mark Tonchick</a></li>
-        <li class="flex items-center"><Image height={32} width={32} class="inline w-4 h-4" src="/github.png" alt="GitHub logo"/>Github:&nbsp;<a href="https://github.com/mtonc">mtonc on github</a></li>
-        <li>Discord: <a href="https://discordapp.com/users/398293326442397697">mtonc on discord</a></li>
-        <li>Codepen:&nbsp;<a href="https://codepen.io/mtonc">mtonc on codepen</a></li>
-        <li>p5.js:&nbsp;<a href="https://editor.p5js.org/m.tonchick/sketches">mtonc on p5.js</a></li>
-      </ul>
-    </Pane>
-    <Pane color="e279e1">
-      
-    </Pane>
-  </AstroWindow>
-</BasePage>
+<!DOCTYPE html>
+<html lang="en" transition:animate="none">
+  <BasePage
+    title="Home"
+    description="The home page of the site"
+    color="aadfe5"
+  >
+    <AstroWindow>
+      <Pane color="aadfe5" heading="Hello, world!">
+        <br/>
+        <p>
+          Welcome to mtonc.dev. This is my personal site to demonstrate various technologies as well as host my blog. 
+          I will be discussing my various projects, including code examples. The long term goals of this site is to display my projects
+          and to demostrate my writing abilities in the hopes of securing a Developer Relations job.
+        </p>
+      </Pane>
+      <Pane color="f7c821" heading="Socials">
+        <br/>
+        <ul>
+          {socials.map(link => <SocialLink link={link} />)}
+        </ul>
+      </Pane>
+      <Pane color="e279e1">
+        <br/>
+      </Pane>
+    </AstroWindow>
+  </BasePage>
+</html>

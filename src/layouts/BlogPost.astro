@@ -1,40 +1,36 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import BasePage from '../layouts/BasePage.astro';
-import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
+import BaseHead from '../components/BaseHead.astro';
 
 interface Props {
-  title?: string;
-  description?: string;
+  title: string;
+  showTitle: boolean,
+  description: string;
   pubDate: Date;
   updatedDate?: Date;
   heroImage?: string;
+  heroAlt?: string;
 }
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, showTitle, description, pubDate, updatedDate, heroImage, heroAlt = 'A poor description of an image' } = Astro.props;
 ---
-<BasePage>
-    {heroImage && <Image width={720} height={360} src={heroImage} alt="" />}
-    {title && <h1 class="title">{title}</h1>}
-    <FormattedDate date={pubDate} />
-    {
-      updatedDate && (
-        <div class="last-updated-on">
-          Last updated on <FormattedDate date={updatedDate} />
-        </div>
-      )
-    }
-  <article>
-    <slot/>
-  </article>
-</BasePage>
-<style>
-  .title {
-    font-size: 2em;
-    margin: 0.25em 0 0;
-  }
-  .last-updated-on {
-    font-style: italic;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={title + " | mtonc.dev"} description={description} />
+  </head>
+  <BasePage title={title} showTitle={showTitle} description={description} heroImage={heroImage} heroAlt={heroAlt} showTitle>
+      Originally published: <FormattedDate date={pubDate} />
+      {
+        updatedDate && (
+          <div class="italic">
+            Last updated on: <FormattedDate date={updatedDate} />
+          </div>
+        )
+      }
+    <article>
+      <slot/>
+    </article>
+  </BasePage>
+</html>

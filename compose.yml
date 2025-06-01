@@ -1,0 +1,86 @@
+services:    
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "80:80/udp"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - caddy_net
+      - cloudflare
+    env_file:
+      - .env
+
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - caddy
+    networks:
+      - cloudflare
+
+  db:
+    container_name: mariadb
+    image: mariadb:10.11
+    command: --max-allowed-packet=64MB
+    restart: always
+    volumes:
+      - db:/var/lib/mysql:Z
+    networks:
+      - matomo
+    environment:
+      - MARIADB_DISABLE_UPGRADE_BACKUP=1
+    env_file:
+      - ./db.env
+
+  matomo:
+    container_name: matomo
+    image: matomo:5.2.2
+    restart: always
+    labels:
+      caddy: matomo.mtonc.dev
+      caddy.import: defaults
+      caddy.reverse_proxy: http://matomo
+    networks:
+      - matomo
+      - caddy_net
+    volumes:
+      # - ./config:/var/www/html/config:z
+      - ./logs:/var/www/html/logs:z
+      - matomo:/var/www/html:z
+    environment:
+      - MATOMO_DATABASE_HOST=mariadb
+      - PHP_MEMORY_LIMIT=1024M
+    env_file:
+      - ./db.env
+    depends_on:
+      - caddy
+
+volumes:
+  caddy_data:
+  caddy_config:
+  db:
+  matomo:
+
+networks:
+  caddy_net:
+    name: caddy_net
+    attachable: true
+    external: true
+  cloudflare:
+    name: cloudflare
+    attachable: true
+  matomo:
+    name: matomo
+    attachable: true

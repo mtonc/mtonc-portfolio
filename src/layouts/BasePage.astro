@@ -1,41 +1,35 @@
----
-import { Image } from 'astro:assets';
+--- 
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
+import Header from '../components/CustomHeader.astro';
 import Footer from '../components/Footer.astro';
-
+import { CldImage } from 'astro-cloudinary';
 interface Props {
-  title?: string;
+  title: string;
   description?: string;
-  heroImage?: string;
-  imgAlt?: string
+  heroImage?: string | undefined;
+  heroAlt?: string;
+  showTitle?: boolean;
+  color?: string;
 }
 
-const { title = '', description = '', heroImage = '', imgAlt = ''} = Astro.props;
----
-<base-page>
-<!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <BaseHead title={title} description={description} image={heroImage}/>
-      <style>
-        .title {
-          font-size: 2em;
-          margin: 0.25em 0 0;
-        }
-      </style>
-    </head>
+const { title, description = '', heroImage = undefined, heroAlt = '', showTitle = false, color = '4af626'} = Astro.props;
 
-    <body class="transition-colors duration-500">
-      <Header />
-      <main class="p-4">
-        {heroImage && <Image width={720} height={360} src={heroImage} alt={imgAlt} />}
-        {title && <h1 class="title">{title}</h1>}
+---
+<base-page data-color={color}>
+  <BaseHead title={title} description={description} image={heroImage}/>
+  <body class="transition-colors duration-500" transition:animate="slide">
+    <Header />
+    <main class="flex flex-col items-center ">
+      <section>
+        {heroImage && <CldImage width={720} height={360} src={heroImage} alt={heroAlt} />}
+        {title && showTitle && <h1 class="my-3 text-center">{title}</h1>}
+      </section>
+      <section class="px-4 pb-4 flex w-full md:w-4/5 items-center flex-col">
         <slot/>
-      </main>
-      <Footer />
-    </body>
-  </html>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </base-page>
 <script>
   import { $color } from "../store";
@@ -46,6 +40,9 @@ const { title = '', description = '', heroImage = '', imgAlt = ''} = Astro.props
     }
     connectedCallback() {
       const body = document.body as HTMLBodyElement;
+      if (this.dataset.color !== undefined) {
+        $color.set(this.dataset.color);
+      }
       $color.subscribe(c => {
         body.style.backgroundColor = `#${c}`;
       });

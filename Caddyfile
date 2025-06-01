@@ -1,0 +1,57 @@
+{
+	admin :2072 {
+		origins localhost
+		enforce_origin
+	}
+	acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+	email m.tonchick@gmail.com
+	log {
+		output file /var/log/access.log
+	}
+}
+
+(cloudflare_tls) {
+  tls {
+    dns cloudflare {
+      zone_token {env.CF_ZONE_ACCOUNT_TOKEN}
+      api_token {env.CF_API_ACCOUNT_TOKEN}
+    }
+    resolvers 1.1.1.1
+  }
+}
+
+(secure_headers) {
+  header {
+    # disable FLoC tracking
+    Permissions-Policy interest-cohort=()
+    # enable HSTS
+    Strict-Transport-Security max-age=31536000
+  	# disable clients from sniffing the media type
+    X-Content-Type-Options nosniff
+    # clickjacking protection
+    X-Frame-Options DENY
+  }
+}
+
+(defaults) {
+  import cloudflare_tls
+  import secure_headers
+}
+
+mtonc.dev {
+	import defaults
+  file_server
+  root * /usr/share/caddy
+  try_files {path}/index.html {path}
+  encode zstd gzip
+}
+
+www.mtonc.dev {
+	import defaults
+  redir https://mtonc.dev
+}
+
+caddy.mtonc.dev {
+	import defaults
+	reverse_proxy //localhost:2072
+}

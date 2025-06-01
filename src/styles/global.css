@@ -3,15 +3,16 @@
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
+
 body {
-  font-family: "Chakra Petch", sans-serif;
+  font-family: "Quantico", sans-serif;
 	text-align: left;
-	background-color: #fff;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	line-height: 1.5;
 	color: #444;
 }
+
 h1,
 h2,
 h3,
@@ -22,40 +23,71 @@ strong,
 b {
 	color: #222;
 }
+h1 {
+  @apply text-4xl font-bold;
+}
+h2 {
+  @apply text-3xl font-bold;
+}
+h3 {
+  @apply text-2xl font-bold;
+}
+h4 {
+  @apply text-xl font-bold;
+}
+h5 {
+  @apply text-lg font-bold;
+}
+h6 {
+  @apply text-base font-bold;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply mt-2
+}
 strong, b {
-  font-family: "Chakra Petch", sans-serif;
-  font-weight: 700;
+  font-family: "Quantico", sans-serif;
+  @apply font-bold;
 }
 em, i {
-  font-family: "Chakra Petch", sans-serif;
-  font-weight: 400;
-  font-style: italic;
+  font-family: "Quantico", sans-serif;
+  @apply italic font-normal
 }
-a {
-	color: #3273dc;
+ol {
+  @apply list-decimal;
 }
-nav a {
-	margin-right: 10px;
+ul {
+  @apply list-disc;
+}
+ol, ul {
+  @apply list-inside;
+}
+a:not(nav a, footer a, .post-card) {
+	@apply bg-blue-500 text-yellow-300 px-1 shadow-[4px_4px_0_0_rgb(0,0,0,0,1)] shadow-yellow-300;
 }
 textarea {
-	width: 100%;
-	font-size: 16px;
+	@apply text-base w-full;
 }
 input {
-	font-size: 16px;
+	@apply text-base;
 }
 content {
 	line-height: 1.6;
 }
 p {
-  font-family: 'Chakra Petch', sans-serif;
-  font-weight: 500;
+  font-family: 'Quantico', sans-serif;
+  @apply font-normal text-sm my-1;
 }
 table {
-	width: 100%;
+	@apply w-full;
 }
 img {
 	max-width: 100%;
+  width: max-content;
 	height: auto;
 }
 pre, code {
@@ -74,9 +106,29 @@ pre > code {
 	all: unset;
 }
 blockquote {
-	border: 1px solid #999;
-	color: #222;
-	padding: 2px 0px 2px 20px;
-	margin: 0px;
-	font-style: italic;
+  @apply text-slate-900 bg-neutral-200 py-1 pl-4 m-2 italic shadow-[4px_4px_0_0_rgb(0,0,0,0,1)] shadow-slate-400;
+}
+
+li > p {
+  @apply inline;
+}
+
+ul ul {
+  @apply pl-4;
+}
+
+h3#contents + ul,
+h3#contents + ul ul
+ {
+  @apply list-none
+}
+
+h3#contents + ul li a{
+  @apply text-lg;
+}
+h3#contents + ul ul li a{
+  @apply text-base;
+}
+h3#contents + ul ul ul li a {
+  @apply text-sm;
 }

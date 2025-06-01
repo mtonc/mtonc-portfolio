@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'a'>;
 
-const { href, class: className, ...props } = Astro.props;
+const { href, ...props } = Astro.props as Props;
 
 const { pathname } = Astro.url;
 const isActive = href === pathname || href === pathname.replace(/\/$/, '');
@@ -12,14 +12,15 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, '');
   <a
     href={href}
     class:list={[
-      className,
-      { 'active font-bold underline': isActive },
       'inline-block',
       'hover:scale-125',
       'transition-transform',
       'text-black',
-      'font-medium',
-      'no-underline',
+      'text-xl',
+      [
+        { 'active font-bold underline underline-offset-8': isActive },
+        { 'font-medium no-underline': !isActive },
+      ]
     ]}
     {...props}
   >
@@ -27,7 +28,7 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, '');
   </a>
 </header-link>
 <script>
-  import { $color } from "../store";
+ import { $color } from "../store";
 
   class HeaderLink extends HTMLElement {
     constructor() {
@@ -35,7 +36,9 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, '');
     }
     connectedCallback() {
       const a = this.querySelector('a') as HTMLAnchorElement;
-      $color.subscribe(c => a.style.textShadow = `#${c} 0 0 2px, #${c} 0 0 4px, #000 0 0 6px`);
+      $color.subscribe(c => a.style.color = `#${c}`);
+      const { textContent } = a;
+      a.textContent = textContent ? textContent.toUpperCase() : null;
     }
   }
   customElements.define('header-link', HeaderLink)

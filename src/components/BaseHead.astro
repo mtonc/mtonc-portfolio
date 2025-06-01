@@ -2,20 +2,41 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
+import '../styles/dmvendor.css';
+import { getCldOgImageUrl } from 'astro-cloudinary/helpers';
+import { SITE_TITLE } from '../consts';
 
 export interface Props {
 	title: string;
 	description: string;
-	image?: string;
+	image?: string | undefined;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
+const { title, description, image = undefined} = Astro.props;
+
+let imageUrl = undefined;
+if (image !== undefined) {
+  imageUrl = getCldOgImageUrl({ src: image });
+}
 ---
-<!-- Global Metadata -->
+<head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Matomo Tag Manager --> 
+{import.meta.env.MODE === 'PRODUCTION' && <script>
+  var _mtm = window._mtm = window._mtm || [];
+  _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+  (function() {
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src='https://matomo.mtonc.dev/js/container_GLlxd0CV.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>}
+<!-- End Matomo Tag Manager -->
+
+<!-- Global Metadata -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
@@ -24,7 +45,7 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<meta name="title" content={title} />
+<meta name="title" content={`${title} | ${SITE_TITLE}`} />
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
@@ -32,15 +53,22 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+{imageUrl && <meta property="og:image" content={imageUrl} />}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+{imageUrl && <meta property="twitter:image" content={imageUrl} />}
 
+<link
+    rel="alternate"
+    type="application/rss+xml"
+    title="mtonc.dev"
+    href={new URL("rss.xml", Astro.site)}
+/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
