@@ -10,20 +10,20 @@ interface Link {
 const links: Link[] = [
   {
     href: '/',
-    text: 'Home',
+    text: 'home',
   },
   {
     href: '/about',
-    text: 'About'
+    text: 'about'
   },
   {
     href: '/blog',
-    text: 'Blog'
+    text: 'blog'
   }
 ]
 ---
-<custom-header class="max-w-full relative">
-  <div class="bg-cover bg-[url('/grid.svg')]">
+<custom-header class="w-full fixed top-0">
+  <div class="bg-fit bg-[url('/grid.svg')]">
   <header class="
     p-4
     border-b
@@ -33,7 +33,7 @@ const links: Link[] = [
     font-['dm']
     max-w-full
   ">
-    <h2 class="text-4xl text-black my-3">
+    <h2 class="text-4xl text-black mt-0! mb-2">
       {SITE_TITLE}
     </h2>
     
@@ -44,7 +44,7 @@ const links: Link[] = [
   </div>
 </custom-header>
 <script>
-  import { $color } from '../store';
+  import { $activeSet } from '../store.ts';
 
   class CustomHeader extends HTMLElement {
     constructor() {
@@ -52,7 +52,16 @@ const links: Link[] = [
     }
     connectedCallback() {
       const siteTitle = this.querySelector('h2') as HTMLHeadingElement;
-      $color.subscribe(c => siteTitle.style.color = `#${c}`);
+      $activeSet.subscribe( (newSet, oldSet) => {
+        if (oldSet && siteTitle.classList.contains(oldSet.text)) {
+          siteTitle.classList.remove(oldSet.text);
+        }
+        siteTitle.classList.add(newSet.text);
+      });
+
+      const height = this.clientHeight; // get height of header
+      const root = document.querySelector(':root') as HTMLElement;
+      root.style.setProperty('--header-height', `${height}px`); // change root css var to reuse on body
     }
   }
 

@@ -3,10 +3,13 @@ import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'a'>;
 
+const possibleHrefs = ['/', '/about', '/blog'];
 const { href, ...props } = Astro.props as Props;
-
 const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, '');
+const index = pathname.indexOf('/', 1);
+const endpoint = index === -1 ? pathname.length : index;
+const subpath = pathname.substring(0, endpoint);
+const isActive = possibleHrefs.includes(subpath) && subpath === href;
 ---
 <header-link>
   <a
@@ -28,7 +31,7 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, '');
   </a>
 </header-link>
 <script>
- import { $color } from "../store";
+ import { $activeSet } from "../store.ts";
 
   class HeaderLink extends HTMLElement {
     constructor() {
@@ -36,7 +39,12 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, '');
     }
     connectedCallback() {
       const a = this.querySelector('a') as HTMLAnchorElement;
-      $color.subscribe(c => a.style.color = `#${c}`);
+      $activeSet.subscribe((newSet, oldSet) => {
+        if (oldSet && a.classList.contains(oldSet.text)) {
+          a.classList.remove(oldSet.text);
+        }
+        a.classList.add(newSet.text);
+      });
       const { textContent } = a;
       a.textContent = textContent ? textContent.toUpperCase() : null;
     }

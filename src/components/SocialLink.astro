@@ -1,11 +1,20 @@
 ---
 import { CldImage } from 'astro-cloudinary'
 
-const { link } = Astro.props;
+interface Props {
+  src?: string | undefined;
+  altText?: string;
+  href: string;
+  linkText: string;
+}
+
+const { href, linkText, src = '', altText = '' } = Astro.props;
 ---
 <social-link>
-  <li class="flex items-center">
-    <CldImage crop={{type: 'pad'}} height={24} width={24} src={link.src} alt={link.altText}/>&nbsp;{link.label || ''}:&nbsp;
-    <a  href={link.href}>{link.linkText}</a>
+  <li class="flex items-center my-2">
+    <slot name="icon">
+      <CldImage class="mr-2" crop={{type: 'pad'}} height={24} width={24} src={src} alt={altText}/>
+    </slot>
+    <a class="bg-blue-500 text-yellow-300 px-1 shadow-[4px_4px_0_0_rgb(0,0,0,0,1)] shadow-yellow-300" href={href}>{linkText}</a>
   </li>
 </social-link>

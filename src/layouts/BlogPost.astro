@@ -1,11 +1,9 @@
 ---
 import BasePage from '../layouts/BasePage.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import BaseHead from '../components/BaseHead.astro';
+import BlogDates from '../components/BlogDates.astro';
 
 interface Props {
   title: string;
-  showTitle: boolean,
   description: string;
   pubDate: Date;
   updatedDate?: Date;
@@ -13,24 +11,13 @@ interface Props {
   heroAlt?: string;
 }
 
-const { title, showTitle, description, pubDate, updatedDate, heroImage, heroAlt = 'A poor description of an image' } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroAlt = 'A poor description of an image', ...props} = Astro.props;
 ---
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <BaseHead title={title + " | mtonc.dev"} description={description} />
-  </head>
-  <BasePage title={title} showTitle={showTitle} description={description} heroImage={heroImage} heroAlt={heroAlt} showTitle>
-      Originally published: <FormattedDate date={pubDate} />
-      {
-        updatedDate && (
-          <div class="italic">
-            Last updated on: <FormattedDate date={updatedDate} />
-          </div>
-        )
-      }
-    <article>
-      <slot/>
-    </article>
+<blog-post>
+  <BasePage title={title} description={description} heroImage={heroImage} heroAlt={heroAlt} showTitle {...props}>
+    <fragment class="text-center" slot="blog-post">
+      <BlogDates pubDate={pubDate} updatedDate={updatedDate} />
+      <slot />
+    </fragment>
   </BasePage>
-</html>
+</blog-post>

@@ -1,7 +1,10 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import Prose from '../../components/Prose.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import BaseHead from '../../components/BaseHead.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog') as CollectionEntry<'blog'>[];
@@ -12,15 +15,20 @@ export async function getStaticPaths() {
 }
 
 const post = Astro.props;
-let showTitle = false;
+const { title, description } = post.data;
 const { Content, headings } = await post.render();
-if (headings.length) {
-  const h1 = headings.filter(h => h.depth === 1);
-  showTitle = h1.length === 0;
-}
-
 ---
-
-<BlogPost {...post.data} showTitle={showTitle}>
-	<Content />
-</BlogPost>
+<!DOCTYPE html>
+<html>
+  <BaseHead title={title} description={description} />
+  <body class="pt-(--header-height)">
+    <BlogPost {...post.data}>
+      <div class="w-full md:w-3/12 md:h-max md:float-left md:sticky md:top-4">
+        <TableOfContents headings={headings} />
+      </div>
+      <div class="w-full md:w-9/12 md:float-left p-4 md:text-left">
+        <Content />
+      </div>
+    </BlogPost>
+  </body>
+</html>

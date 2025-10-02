@@ -1,0 +1,20 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+
+interface Props {
+  pubDate?: Date,
+  updatedDate?: Date
+}
+
+const { pubDate = new Date(), updatedDate } = Astro.props;
+---
+<blog-dates>
+  <div>Originally published: <FormattedDate date={pubDate} /></div>
+   {
+      updatedDate && (
+        <div class="italic">
+          Last updated on: <FormattedDate date={updatedDate} />
+        </div>
+      )
+    }
+</astro-details>

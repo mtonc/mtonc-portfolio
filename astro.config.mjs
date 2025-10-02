@@ -1,12 +1,13 @@
 import { defineConfig, envField } from 'astro/config';
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import robotsTxt from 'astro-robots-txt';
-import remarkToc from 'remark-toc';
 import remarkNormalizeHeadings from 'remark-normalize-headings'
 import a11yEmoji from '@fec/remark-a11y-emoji';
 import sectionize from '@hbsnow/rehype-sectionize';
+import remarkGemoji from 'remark-gemoji';
+import rehypeSlug from 'rehype-slug';
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,13 +23,14 @@ export default defineConfig({
     }
   },
   site: 'https://mtonc.dev',
-  integrations: [sitemap(), tailwind(), partytown(), robotsTxt()],
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ]
+  },
+  integrations: [sitemap(), partytown(), robotsTxt()],
   markdown: {
-    remarkPlugins: [
-      [remarkToc, { heading: 'Contents', maxDepth: 3 } ],
-      remarkNormalizeHeadings,
-      a11yEmoji
-    ],
-    rehypePlugins: [sectionize]
+    remarkPlugins: [remarkNormalizeHeadings, remarkGemoji, a11yEmoji],
+    rehypePlugins: [sectionize, rehypeSlug]
   }
 });

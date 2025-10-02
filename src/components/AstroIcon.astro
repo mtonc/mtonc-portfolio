@@ -1,0 +1,37 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import Astrojs from 'simple-icons-astro/Astro';
+import Caddy from 'simple-icons-astro/Caddy';
+import Cloudflare from 'simple-icons-astro/Cloudflare';
+import Codepen from 'simple-icons-astro/Codepen';
+import Discord from 'simple-icons-astro/Discord';
+import Github from 'simple-icons-astro/Github';
+import P5dotjs from 'simple-icons-astro/P5dotjs';
+import Popos from 'simple-icons-astro/Popos';
+import Stackoverflow from 'simple-icons-astro/Stackoverflow';
+import Tailwindcss from 'simple-icons-astro/Tailwindcss';
+
+const Components: Record<string, any>= { 
+  'aj': Astrojs,
+  'cd': Caddy,
+  'cf': Cloudflare,
+  'cp': Codepen,
+  'dc': Discord,
+  'gh': Github,
+  'p5': P5dotjs,
+  'po': Popos,
+  'so': Stackoverflow,
+  'tw': Tailwindcss
+};
+
+interface Props extends HTMLAttributes<'svg'>{
+  tag: string;
+  size: number;
+}
+
+const { tag , size, class: className, ...props } = Astro.props;
+const MyIcon = Components[tag];
+---
+<astro-icon class:list={['flex', 'items-center', className]}>
+  <MyIcon size={size} {...props} />
+</astro-icon>

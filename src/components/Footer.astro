@@ -1,8 +1,32 @@
 ---
+import AstroIcon from "./AstroIcon.astro";
+
 const today = new Date();
+const size = 20;
+const tags = ['aj', 'cd', 'cf', 'tw'];
+const stroke = ["stroke-1", "stroke-gray-700/75"];
 ---
 
-<footer class="text-center p-6">
-	&copy; {today.getFullYear()} mtonc. All rights reserved.
-  Built with <a href="https://astro.build/"><img class="w-4 h-4 inline" src="/favicon.svg"/>Astro</a>.
+<footer class="flex flex-col items-center p-6">
+	&copy; {today.getFullYear()} mtonc. All rights reserved.<br/>
+  <span class="flex">Built with: {
+    tags.map( (t, i) => {
+      const length = tags.length;
+      const after = i < length -1 ? "after:mr-2 after:inline after:h-auto after:w-fit": "";
+      return <AstroIcon class:list={[...stroke, after]} tag={t} size={size}  />
+    })
+  } on <AstroIcon class:list={["ml-2", ...stroke]} tag="po" size={size} /></span><br />
+  <span class="flex">&#123;...❤️&#125;</span>
 </footer>
+<script>
+  class Footer extends HTMLElement {
+    constructor() {
+      super();
+    }
+    connectedCallback() {
+      const height = this.clientHeight; // get height of header
+      const root = document.querySelector(':root') as HTMLElement;
+      root.style.setProperty('--footer-height', `${height}px`); // change root css var to reuse on body
+    }
+  }
+</script>

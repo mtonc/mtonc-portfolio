@@ -1,10 +1,10 @@
-<astro-window>
+·<astro-window>
   <div>
     <slot />
   </div>
 </astro-window>
 <script>
-import { $color } from "../store";
+import { $activeColor } from "../store.ts";
 
 	class AstroWindow extends HTMLElement {
     constructor() {
@@ -17,11 +17,11 @@ import { $color } from "../store";
       };
       const observer = new IntersectionObserver((entries) => {
         const intersect = entries.filter((entry) => entry.isIntersecting);
-        if (intersect) {
-          const elem = intersect[0].target as HTMLElement;
-          const bgColor = elem.dataset.color;
+        if (intersect.length) {
+          const elem = ( intersect[0]?.target ?? null ) as HTMLElement || null;
+          const bgColor = elem ? elem.dataset.color : null;
           if (bgColor) {
-            $color.set(bgColor);
+            $activeColor.set(bgColor);
           }
         }
       }, options);

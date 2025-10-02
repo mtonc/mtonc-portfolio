@@ -1,0 +1,31 @@
+---
+import type { MarkdownHeading } from "astro";
+interface Props {
+  headings: MarkdownHeading[]
+  class?: string | undefined 
+}
+const { headings, class: className } = Astro.props;
+const { pathname } = Astro.url;
+let template = ``;
+let lastLvl = -1;
+const li = (h: MarkdownHeading) => `<li><a href='#${h.slug}'>${h.text}</a></li>`;
+headings.forEach((h, i) => {
+  if (lastLvl > -1) {
+    switch(lastLvl !== h.depth) {
+      case true:
+          template += lastLvl < h.depth ? `<ul>` : `</ul>`;
+        break;
+      case false:
+      default:
+        break;
+    }
+  }
+  template += li(h);
+  lastLvl = h.depth
+})
+---
+<table-of-contents class:list={[className]}>
+  <h3>Contents</h3>
+  <ul set:html={template}>
+  </ul>
+</table-of-contents>

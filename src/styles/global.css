@@ -3,6 +3,15 @@
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
+@import "tailwindcss";
+
+:root {
+  --header-height: 105px;
+  --footer-height: 120px;
+  --hf-height: calc(var(--header-height) + var(--footer-height));
+  --main-height: calc(100vh - var(--hf-height));
+  --stroke-gray: rgb(128,128,128,0.75);
+}
 
 body {
   font-family: "Quantico", sans-serif;
@@ -24,22 +33,22 @@ b {
 	color: #222;
 }
 h1 {
-  @apply text-4xl font-bold;
+  @apply text-4xl
 }
 h2 {
-  @apply text-3xl font-bold;
+  @apply text-3xl;
 }
 h3 {
-  @apply text-2xl font-bold;
+  @apply text-2xl;
 }
 h4 {
-  @apply text-xl font-bold;
+  @apply text-xl;
 }
 h5 {
-  @apply text-lg font-bold;
+  @apply text-lg;
 }
 h6 {
-  @apply text-base font-bold;
+  @apply text-base;
 }
 h1,
 h2,
@@ -47,14 +56,14 @@ h3,
 h4,
 h5,
 h6 {
-  @apply mt-2
+  @apply mt-2 font-bold scroll-mt-6
 }
 strong, b {
-  font-family: "Quantico", sans-serif;
+  font-family: "dm", monospace;
   @apply font-bold;
 }
 em, i {
-  font-family: "Quantico", sans-serif;
+  font-family: "dm", monospace;
   @apply italic font-normal
 }
 ol {
@@ -66,9 +75,7 @@ ul {
 ol, ul {
   @apply list-inside;
 }
-a:not(nav a, footer a, .post-card) {
-	@apply bg-blue-500 text-yellow-300 px-1 shadow-[4px_4px_0_0_rgb(0,0,0,0,1)] shadow-yellow-300;
-}
+
 textarea {
 	@apply text-base w-full;
 }
@@ -77,8 +84,6 @@ input {
 }
 content {
 	line-height: 1.6;
-}
-p {
   font-family: 'Quantico', sans-serif;
   @apply font-normal text-sm my-1;
 }
@@ -91,7 +96,7 @@ img {
 	height: auto;
 }
 pre, code {
-  font-family: "Space Mono", monospace;
+  font-family: "dm", monospace;
   font-weight: 400;
   font-style: normal;
 }

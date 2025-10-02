@@ -4,13 +4,17 @@ import BaseHead from "../components/BaseHead.astro";
 import Pane from "../components/Pane.astro";
 import AstroWindow from "../components/AstroWindow.astro";
 import SocialLink from '../components/SocialLink.astro';
+import AstroIcon from "../components/AstroIcon.astro";
+
+const title = "Home"
+const description = "The homepage of the website"
 
 interface socialLink {
-  src: string;
+  src?: string | undefined;
   altText?: string | undefined;
+  component?: string | undefined;
   href: string;
   linkText: string;
-  label?: string;
 }
 
 const socials: socialLink[] = [
@@ -19,65 +23,78 @@ const socials: socialLink[] = [
     href: 'https://www.linkedin/in/marktonchick',
     linkText: 'Mark Tonchick',
     src: 'LI-In-Bug_m5eans',
-    label: 'LinkedIn',
   },
   {
     altText: 'GitHub logo',
     href: 'https://github.com/mtonc"',
     linkText: 'mtonc',
-    src: 'github_jd2z5w',
-    label: 'Github'
+    component: 'gh'
   },
   {
     altText: 'Discord logo',
     href: 'https://discordapp.com/users/398293326442397697',
     linkText: 'mtonc',
-    src: 'icon_clyde_blurple_CMYK_hrrlvt',
-    label: 'Discord'
+    component: 'dc'
   },
   {
     altText: 'CodePen Logo',
     href: 'https://codepen.io/mtonc',
     linkText: 'mtonc',
-    src: 'cp-logo_k5jjkn',
-    label: 'CodePen'
+    component: 'cp'
   },
   {
     altText: 'p5.js logo',
     href: 'https://editor.p5js.org/m.tonchick/sketches',
     linkText: 'm.tonchick',
-    src: 'p5_hrpoox',
-    label: 'p5.js'
+    component: 'p5'
+  },
+  {
+    altText: 'Stack Overflow logo',
+    href: 'https://stackoverflow.com/users/9742442/mtonc?tab=profile',
+    linkText: 'mtonc',
+    component: 'so'
   }
 ];
 
 
 ---
 <!DOCTYPE html>
-<html lang="en" transition:animate="none">
-  <BasePage
-    title="Home"
-    description="The home page of the site"
-    color="aadfe5"
-  >
-    <AstroWindow>
-      <Pane color="aadfe5" heading="Hello, world!">
-        <br/>
-        <p>
-          Welcome to mtonc.dev. This is my personal site to demonstrate various technologies as well as host my blog. 
-          I will be discussing my various projects, including code examples. The long term goals of this site is to display my projects
-          and to demostrate my writing abilities in the hopes of securing a Developer Relations job.
-        </p>
-      </Pane>
-      <Pane color="f7c821" heading="Socials">
-        <br/>
-        <ul>
-          {socials.map(link => <SocialLink link={link} />)}
-        </ul>
-      </Pane>
-      <Pane color="e279e1">
-        <br/>
-      </Pane>
-    </AstroWindow>
-  </BasePage>
+<html lang="en" >
+  <BaseHead title={title + " | mtonc.dev"} description={description} />
+    <body class="pt-(--header-height)">
+      <BasePage
+        title={title}
+        description={description}
+        color="blue"
+      >
+        <AstroWindow>
+          <Pane color="blue" heading=`Hello, world! 🌎`>
+            <br/>
+            <p>
+              Welcome to mtonc.dev. This is my personal site to demonstrate various technologies as well as host my blog. 
+              I will be discussing my various projects, including code examples. The long term goals of this site is to display my projects
+              and to demostrate my writing abilities in the hopes of securing a Developer Relations job.
+            </p>
+          </Pane>
+          <Pane color="orange" heading="Socials">
+            <a class="float-right" href="https://stackoverflow.com/users/9742442/mtonc">
+              <img src="https://stackoverflow.com/users/flair/9742442.png?theme=clean" width="208" height="58" alt="profile for mtonc at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for mtonc at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+            </a>
+            <br/>
+            <ul>
+              {socials.map(link => {
+                return link.src ? 
+                <SocialLink {...link} /> :
+                <SocialLink {...link}>
+                  <AstroIcon class="mr-2 stroke-1 stroke-gray-700/75" tag={link.component || ''} size={24} slot="icon"/>
+                </SocialLink>
+              })}
+            </ul>
+          </Pane>
+          <Pane color="pink">
+            <br/>
+          </Pane>
+        </AstroWindow>
+    </BasePage>
+  </body>
 </html>
